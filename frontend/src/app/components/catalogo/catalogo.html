@@ -1,1 +1,35 @@
-<p>catalogo works!</p>
+<h2 class="titulo">Catálogo de videojuegos</h2>
+
+<div class="grid">
+
+  <div class="card"
+       *ngFor="let p of productos"
+       [ngClass]="{ 'agotado': !p.disponible }">
+
+    <img [src]="p.imagen" alt="producto">
+
+    <h3>{{ p.nombre }}</h3>
+
+    <p class="precio">{{ p.precio | currency }}</p>
+
+    <p *ngIf="p.disponible; else noStock" class="disponible">
+      Disponible
+    </p>
+
+    <ng-template #noStock>
+      <p class="no-disponible">Agotado</p>
+    </ng-template>
+
+    <div class="acciones">
+      <button [routerLink]="['/detalle', p.id]">
+        Ver detalle
+      </button>
+
+      <button *ngIf="p.disponible">
+        Agregar
+      </button>
+    </div>
+
+  </div>
+
+</div>

@@ -1,1 +1,46 @@
-<p>inicio works!</p>
+<div class="inicio">
+
+  <section class="hero">
+    <h1>Bienvenido a XGames</h1>
+    <p>Descubre los mejores videojuegos</p>
+  </section>
+
+  <section class="carousel">
+
+  <button (click)="anterior()">‹</button>
+
+  <img [src]="imagenes[index]" alt="banner">
+
+  <button (click)="siguiente()">›</button>
+
+</section>
+<h1>Lo mas vendido</h1>
+  <section class="productos">
+
+    <div class="card" *ngFor="let p of productos">
+      <h3>{{ p.nombre }}</h3>
+      <p>{{ p.precio | currency }}</p>
+      <button>Ver más</button>
+    </div>
+
+  </section>
+
+<h1>Conocenos</h1>
+
+<section class="about">
+
+  <div class="about-card">
+    <img src="./imgs/user1.jpeg">
+    <h3>Integrante 1</h3>
+    <p>Descripción breve del integrante.</p>
+  </div>
+
+  <div class="about-card">
+    <img src="./imgs/user2.jpeg">
+    <h3>Integrante 2</h3>
+    <p>Descripción breve del integrante.</p>
+  </div>
+
+</section>
+
+</div>

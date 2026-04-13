@@ -1,0 +1,99 @@
+.inicio {
+  padding: 40px;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.productos {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.card {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 12px;
+  width: 220px;
+  text-align: center;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
+
+.card button {
+  background: var(--accent);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.carousel {
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  height: auto;
+  overflow: hidden;
+  margin: 0 auto 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #000;
+}
+
+.carousel img {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 10px;
+}
+
+.carousel button {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.5);
+  border: none;
+  color: white;
+  font-size: 2rem;
+  cursor: pointer;
+  padding: 5px 10px;
+  z-index: 1;
+}
+
+.carousel button:first-child {
+  left: 10px;
+}
+
+.carousel button:last-child {
+  right: 10px;
+}
+
+.about {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.about-card {
+  flex: 1;
+  background: var(--card);
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.about-card img {
+  width: 100px;
+  border-radius: 40%;
+  margin-bottom: 10px;
+}
