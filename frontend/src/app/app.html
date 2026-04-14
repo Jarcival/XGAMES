@@ -8,12 +8,13 @@
     ☰
   </button>
 
-  <div class="links" [ngClass]="{ 'active': menuOpen }">
-    <a routerLink="/">Inicio</a>
-    <a routerLink="/catalogo">Catálogo</a>
-    <a routerLink="/carrito">Carrito</a>
-    <a routerLink="/contacto">Contacto</a>
-    <a routerLink="/alta-prod">Alta de Producto</a>
+  <div class="links" #navLinks [ngClass]="{ 'active': menuOpen }">
+    <div class="nav-indicator" [ngStyle]="indicatorStyle"></div>
+    <a routerLink="/" [routerLinkActiveOptions]="{exact: true}" routerLinkActive="active">Inicio</a>
+    <a routerLink="/catalogo" routerLinkActive="active">Catálogo</a>
+    <a routerLink="/carrito" routerLinkActive="active">Carrito</a>
+    <a routerLink="/contacto" routerLinkActive="active">Contacto</a>
+    <a routerLink="/alta-prod" routerLinkActive="active">Alta de Producto</a>
   </div>
 
 </nav>
