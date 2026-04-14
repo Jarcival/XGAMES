@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core'; // <-- Agregamos signal aquí
+import { ProductoService } from '../../core/services/producto';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -9,14 +10,21 @@ import { RouterModule } from '@angular/router';
   templateUrl: './catalogo.html',
   styleUrl: './catalogo.css',
 })
-export class Catalogo {
-//CHINOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-  productos = [
-    { id: 1, nombre: 'FIFA 24', precio: 1200, imagen: '/imgs/user1.jpeg', disponible: true },
-    { id: 2, nombre: 'Call of Duty', precio: 1400, imagen: 'assets/cod.jpg', disponible: false },
-    { id: 3, nombre: 'GTA V', precio: 900, imagen: 'assets/gta.jpg', disponible: true },
-    { id: 4, nombre: 'Minecraft', precio: 600, imagen: 'assets/minecraft.jpg', disponible: true },
-    { id: 5, nombre: 'Minecraft', precio: 600, imagen: 'assets/minecraft.jpg', disponible: true },
-    { id: 6, nombre: 'Minecraft', precio: 600, imagen: 'assets/minecraft.jpg', disponible: true }
-  ];
+
+export class Catalogo implements OnInit {
+  // 1. Convertimos el arreglo normal a un Signal Reactivo
+  juegos = signal<any[]>([]);
+
+  constructor(private productoService: ProductoService) {}
+
+  ngOnInit(): void {
+    this.productoService.getProductos().subscribe({
+      next: (datos: any[]) => {
+        // 2. Usamos .set() para inyectar los datos y "avisarle" a la pantalla
+        this.juegos.set(datos);
+        console.log('Juegos cargados en el Signal:', this.juegos());
+      },
+      error: (err: any) => console.error('Error al cargar productos', err)
+    });
+  }
 }

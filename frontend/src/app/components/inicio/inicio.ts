@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
   templateUrl: './inicio.html',
   styleUrl: './inicio.css',
 })
-export class Inicio {
+export class Inicio implements OnInit, OnDestroy {
 
    imagenes = [
     './imgs/img1.jpg',
@@ -18,6 +18,39 @@ export class Inicio {
   ];
 
   index = 0;
+  intervalId: any;
+
+  ngOnInit() {
+    this.startCarousel();
+  }
+
+  ngOnDestroy() {
+    this.clearCarousel();
+  }
+
+  startCarousel() {
+    this.intervalId = setInterval(() => {
+      this.siguiente();
+    }, 5000);
+  }
+
+  clearCarousel() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
+
+  pause() {
+    this.clearCarousel();
+  }
+
+  resume() {
+    this.startCarousel();
+  }
+
+  setIndex(i: number) {
+    this.index = i;
+  }
 
   siguiente() {
     this.index = (this.index + 1) % this.imagenes.length;
@@ -26,7 +59,8 @@ export class Inicio {
   anterior() {
     this.index = (this.index - 1 + this.imagenes.length) % this.imagenes.length;
   }
-// AQUÍ SIMULAMOS UNA BASE DE DATOS DE PRODUCTOS(CHINOOOOOOOOOOOOOOOOOOOOOOO)
+
+  // SIMULAMOS UNA BASE DE DATOS DE PRODUCTOS
   productos = [
     { id: 1, nombre: 'FIFA 24', precio: 1200, disponible: true },
     { id: 2, nombre: 'Call of Duty', precio: 1400, disponible: true },
@@ -34,7 +68,6 @@ export class Inicio {
     { id: 4, nombre: 'Minecraft', precio: 600, disponible: true }
   ];
 
-  // (simulación BD)
   get productosRandom() {
     return this.productos
       .sort(() => 0.5 - Math.random())
