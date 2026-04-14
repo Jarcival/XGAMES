@@ -1,1 +1,55 @@
-<p>contacto works!</p>
+<h1 class="titulo">Contacto</h1>
+
+<div class="form-container">
+  <div class="form-card premium-card">
+    <div class="card-glow"></div>
+    <div class="card-content">
+      <form #formRef="ngForm" (ngSubmit)="enviar()" class="formulario">
+
+        <div class="input-group">
+          <input type="text"
+                 name="nombre"
+                 [(ngModel)]="nombre"
+                 required
+                 placeholder="Nombre">
+          <small *ngIf="formRef.submitted && !nombre" class="error-msg">
+            Nombre requerido
+          </small>
+        </div>
+
+        <div class="input-group">
+          <input type="email"
+                 name="correo"
+                 [(ngModel)]="correo"
+                 required
+                 placeholder="Correo electrónico">
+          <small *ngIf="formRef.submitted && !correo" class="error-msg">
+            Correo requerido
+          </small>
+        </div>
+
+        <div class="input-group">
+          <input type="text"
+                 name="asunto"
+                 [(ngModel)]="asunto"
+                 placeholder="Asunto">
+        </div>
+
+        <div class="input-group">
+          <textarea name="mensaje"
+                    [(ngModel)]="mensaje"
+                    required
+                    placeholder="Mensaje"></textarea>
+          <small *ngIf="formRef.submitted && !mensaje" class="error-msg">
+            Mensaje requerido
+          </small>
+        </div>
+
+        <button type="submit" class="btn-primary">
+          Enviar Mensaje
+        </button>
+
+      </form>
+    </div>
+  </div>
+</div>

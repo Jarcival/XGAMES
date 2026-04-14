@@ -1,35 +1,52 @@
-<h2 class="titulo">Catálogo de videojuegos</h2>
+<h1 class="titulo">Catálogo de videojuegos</h1>
 
 <div class="grid">
 
-  <div class="card"
-       *ngFor="let p of productos"
-       [ngClass]="{ 'agotado': !p.disponible }">
+  @for (p of juegos(); track p.id) {
 
-    <img [src]="p.imagen" alt="producto">
+    <div class="card premium-card"
+         [ngClass]="{ 'agotado': !p.disponible }">
 
-    <h3>{{ p.nombre }}</h3>
+      <div class="card-glow"></div>
 
-    <p class="precio">{{ p.precio | currency }}</p>
+      <div class="card-content">
 
-    <p *ngIf="p.disponible; else noStock" class="disponible">
-      Disponible
-    </p>
+        <div class="img-wrapper">
+          <img [src]="p.imagen" alt="{{ p.nombre }}">
+        </div>
 
-    <ng-template #noStock>
-      <p class="no-disponible">Agotado</p>
-    </ng-template>
+        <h3>{{ p.nombre }}</h3>
 
-    <div class="acciones">
-      <button [routerLink]="['/detalle', p.id]">
-        Ver detalle
-      </button>
+        <p class="precio">
+          {{ p.precio | currency:'MXN':'symbol-narrow' }}
+        </p>
 
-      <button *ngIf="p.disponible">
-        Agregar
-      </button>
+        @if (p.disponible) {
+          <p class="disponible status">Disponible</p>
+        } @else {
+          <p class="no-disponible status">Agotado</p>
+        }
+
+        <div class="acciones">
+          <button class="btn-outline"
+                  [routerLink]="['/detalle', p.id]">
+            Detalles
+          </button>
+
+          @if (p.disponible) {
+            <button class="btn-primary">
+              Agregar
+            </button>
+          }
+        </div>
+
+      </div>
     </div>
 
-  </div>
+  } @empty {
+
+    <p class="sin-productos">Cargando productos...</p>
+
+  }
 
 </div>
