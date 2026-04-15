@@ -1,83 +1,112 @@
 const express = require('express');
 const cors = require('cors');
+const mysql = require('mysql2/promise');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-// Middlewares globales
-app.use(cors()); // Permite peticiones desde tu app de Angular [cite: 188]
-app.use(express.json()); // Parsea el body de las peticiones a JSON
+app.use(cors());
+app.use(express.json()); 
 
-// ==========================================
-// MIDDLEWARES DE VALIDACIÓN 
-// ==========================================
+// Configuración de la BD 
+const db = mysql.createPool({
+    host: 'localhost',
+    user: 'root', 
+    password: '', 
+    database: 'tienda_videojuegos'
+});
 
+// 1. MIDDLEWARES DE VALIDACIÓN
+
+// Valida que el producto traiga todo y los números sean lógicos
 const validarProducto = (req, res, next) => {
-    const { nombre, precio, stock } = req.body;
+    const { nombre, categoria, marca, precio, stock, imagen } = req.body;
 
-    // Validación de campos vacíos [cite: 199]
-    if (!nombre || nombre.trim() === '') {
-        return res.status(400).json({ error: 'El nombre del producto es obligatorio.' });
+    if (!nombre || !categoria || !marca || !imagen) {
+        return res.status(400).json({ error: 'Faltan campos obligatorios de texto.' });
     }
-    // Validación de precio [cite: 200]
     if (precio === undefined || isNaN(precio) || precio <= 0) {
         return res.status(400).json({ error: 'El precio debe ser un número mayor a 0.' });
     }
-    // Validación de stock [cite: 201]
     if (stock === undefined || isNaN(stock) || stock < 0) {
-        return res.status(400).json({ error: 'El stock no puede ser un valor negativo.' });
+        return res.status(400).json({ error: 'El stock no puede ser negativo.' });
     }
-
-    next(); // Si todo está bien, continúa al endpoint
+    
+    next(); // Si todo está bien, "lo deja pasar" al endpoint
 };
 
+// Valida que el mensaje de contacto no venga vacío
 const validarMensaje = (req, res, next) => {
     const { nombre, correo, asunto, mensaje } = req.body;
-    
-    // Validación de mensaje de contacto [cite: 202]
+
     if (!nombre || !correo || !asunto || !mensaje) {
         return res.status(400).json({ error: 'Todos los campos del contacto son obligatorios.' });
     }
+    
     next();
 };
 
+// 2. ENDPOINTS (RUTAS)
+
+// GET /productos (Listar todos)
+app.get('/productos', async (req, res) => {
+    try {
+        const [rows] = await db.execute('SELECT * FROM productos');
+        res.json(rows);
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener los productos' });
+    }
+});
+
+// GET /productos/:id (Detalle de un solo producto)
+app.get('/productos/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const [rows] = await db.execute('SELECT * FROM productos WHERE id = ?', [id]);
+        
+        if (rows.length === 0) {
+            return res.status(404).json({ error: 'Producto no encontrado' });
+        }
+        res.json(rows[0]); // Mandamos solo el objeto, no un arreglo
+    } catch (error) {
+        res.status(500).json({ error: 'Error al obtener el detalle del producto' });
+    }
+});
+
+// POST /productos (Alta de producto) -> Usamos el middleware "validarProducto"
+app.post('/productos', validarProducto, async (req, res) => {
+    try {
+        const { nombre, categoria, marca, precio, stock, imagen, descripcion } = req.body;
+        const query = `INSERT INTO productos (nombre, categoria, marca, precio, stock, imagen, descripcion, disponible) 
+                       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
+        // Si el stock es 0, lo marcamos como no disponible (0), si es mayor, disponible (1)
+        const disponible = stock > 0 ? 1 : 0; 
+
+        const [resultado] = await db.execute(query, [nombre, categoria, marca, precio, stock, imagen, descripcion || '', disponible]);
+        
+        res.status(201).json({ mensaje: 'Producto creado exitosamente', id: resultado.insertId });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al guardar el producto' });
+    }
+});
+
+// POST /mensajes (Guardar contacto) -> Usamos el middleware "validarMensaje"
+app.post('/mensajes', validarMensaje, async (req, res) => {
+    try {
+        const { nombre, correo, asunto, mensaje } = req.body;
+        const query = 'INSERT INTO mensajes (nombre, correo, asunto, mensaje) VALUES (?, ?, ?, ?)';
+        
+        await db.execute(query, [nombre, correo, asunto, mensaje]);
+        
+        res.status(201).json({ mensaje: 'Mensaje de contacto enviado y guardado correctamente' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al guardar el mensaje' });
+    }
+});
+
 // ==========================================
-// ENDPOINTS 
+// 3. INICIAR SERVIDOR
 // ==========================================
-
-// GET /productos (listar) [cite: 192]
-app.get('/productos', (req, res) => {
-    // TODO: Ejecutar query 'SELECT * FROM productos'
-    res.json({ mensaje: 'Aquí se listarán todos los productos' });
-});
-
-// GET /productos/:id (detalle) [cite: 193]
-app.get('/productos/:id', (req, res) => {
-    const { id } = req.params;
-    // TODO: Ejecutar query 'SELECT * FROM productos WHERE id = ?'
-    res.json({ mensaje: `Detalle del producto con ID: ${id}` });
-});
-
-// POST /productos (alta) [cite: 194] - Usa el middleware de validación
-app.post('/productos', validarProducto, (req, res) => {
-    const { nombre, categoria, marca, precio, stock, imagen, descripcion, disponible } = req.body;
-    // TODO: Ejecutar query 'INSERT INTO productos...'
-    res.status(201).json({ 
-        mensaje: 'Producto agregado exitosamente',
-        producto: req.body 
-    });
-});
-
-// POST /mensajes (guardar contacto) [cite: 195] - Usa el middleware de validación
-app.post('/mensajes', validarMensaje, (req, res) => {
-    const { nombre, correo, asunto, mensaje } = req.body;
-    // TODO: Ejecutar query 'INSERT INTO mensajes...'
-    res.status(201).json({ 
-        mensaje: 'Mensaje de contacto guardado exitosamente' 
-    });
-});
-
-// Iniciar el servidor
+const PORT = 3000;
 app.listen(PORT, () => {
     console.log(`Servidor backend corriendo en http://localhost:${PORT}`);
 });
