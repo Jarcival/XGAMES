@@ -61,8 +61,8 @@
           Producto Disponible
         </label>
 
-        <button type="submit" class="btn-primary" [disabled]="form.invalid">
-          Guardar Producto
+        <button type="submit" class="btn-primary" [disabled]="form.invalid || guardando">
+          {{ guardando ? 'Guardando...' : 'Guardar Producto' }}
         </button>
 
       </form>

@@ -1,55 +1,98 @@
-<h1 class="titulo">Contacto</h1>
+<section class="contacto-wrapper">
+  <h2 class="titulo">Contáctanos</h2>
+  <p class="subtitulo">¿Tienes dudas o comentarios? Escríbenos.</p>
 
-<div class="form-container">
-  <div class="form-card premium-card">
-    <div class="card-glow"></div>
-    <div class="card-content">
-      <form #formRef="ngForm" (ngSubmit)="enviar()" class="formulario">
+  <div class="form-card">
+    <form (ngSubmit)="onSubmit(formContacto)" #formContacto="ngForm" novalidate>
 
-        <div class="input-group">
-          <input type="text"
-                 name="nombre"
-                 [(ngModel)]="nombre"
-                 required
-                 placeholder="Nombre">
-          <small *ngIf="formRef.submitted && !nombre" class="error-msg">
-            Nombre requerido
-          </small>
-        </div>
+      <!-- Nombre -->
+      <div class="campo">
+        <label>Nombre</label>
+        <input
+          type="text"
+          name="nombre"
+          placeholder="Tu nombre completo"
+          [(ngModel)]="datosContacto.nombre"
+          #nombre="ngModel"
+          required
+          minlength="3"
+          [class.invalido]="nombre.invalid && nombre.touched"
+        >
+        @if (nombre.touched && nombre.errors?.['required']) {
+          <span class="error">El nombre es obligatorio.</span>
+        }
+        @if (nombre.touched && nombre.errors?.['minlength']) {
+          <span class="error">Mínimo 3 caracteres.</span>
+        }
+      </div>
 
-        <div class="input-group">
-          <input type="email"
-                 name="correo"
-                 [(ngModel)]="correo"
-                 required
-                 placeholder="Correo electrónico">
-          <small *ngIf="formRef.submitted && !correo" class="error-msg">
-            Correo requerido
-          </small>
-        </div>
+      <!-- Correo -->
+      <div class="campo">
+        <label>Correo electrónico</label>
+        <input
+          type="email"
+          name="correo"
+          placeholder="tucorreo@ejemplo.com"
+          [(ngModel)]="datosContacto.correo"
+          #correo="ngModel"
+          required
+          email
+          [class.invalido]="correo.invalid && correo.touched"
+        >
+        @if (correo.touched && correo.errors?.['required']) {
+          <span class="error">El correo es obligatorio.</span>
+        }
+        @if (correo.touched && correo.errors?.['email']) {
+          <span class="error">Ingresa un correo válido.</span>
+        }
+      </div>
 
-        <div class="input-group">
-          <input type="text"
-                 name="asunto"
-                 [(ngModel)]="asunto"
-                 placeholder="Asunto">
-        </div>
+      <!-- Asunto -->
+      <div class="campo">
+        <label>Asunto</label>
+        <input
+          type="text"
+          name="asunto"
+          placeholder="¿De qué trata tu mensaje?"
+          [(ngModel)]="datosContacto.asunto"
+          #asunto="ngModel"
+          required
+          minlength="5"
+          [class.invalido]="asunto.invalid && asunto.touched"
+        >
+        @if (asunto.touched && asunto.errors?.['required']) {
+          <span class="error">El asunto es obligatorio.</span>
+        }
+        @if (asunto.touched && asunto.errors?.['minlength']) {
+          <span class="error">Mínimo 5 caracteres.</span>
+        }
+      </div>
 
-        <div class="input-group">
-          <textarea name="mensaje"
-                    [(ngModel)]="mensaje"
-                    required
-                    placeholder="Mensaje"></textarea>
-          <small *ngIf="formRef.submitted && !mensaje" class="error-msg">
-            Mensaje requerido
-          </small>
-        </div>
+      <!-- Mensaje -->
+      <div class="campo">
+        <label>Mensaje</label>
+        <textarea
+          name="mensaje"
+          placeholder="Escribe tu mensaje aquí..."
+          rows="5"
+          [(ngModel)]="datosContacto.mensaje"
+          #mensaje="ngModel"
+          required
+          minlength="10"
+          [class.invalido]="mensaje.invalid && mensaje.touched"
+        ></textarea>
+        @if (mensaje.touched && mensaje.errors?.['required']) {
+          <span class="error">El mensaje es obligatorio.</span>
+        }
+        @if (mensaje.touched && mensaje.errors?.['minlength']) {
+          <span class="error">Mínimo 10 caracteres.</span>
+        }
+      </div>
 
-        <button type="submit" class="btn-primary">
-          Enviar Mensaje
-        </button>
+      <button type="submit" class="btn-enviar" [disabled]="enviando">
+        {{ enviando ? 'Enviando...' : 'Enviar mensaje' }}
+      </button>
 
-      </form>
-    </div>
+    </form>
   </div>
-</div>
+</section>

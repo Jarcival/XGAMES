@@ -1,7 +1,8 @@
-import { Component, signal, ElementRef, ViewChild, AfterViewInit, HostListener } from '@angular/core';
+import { Component, signal, ElementRef, ViewChild, AfterViewInit, HostListener, Inject, PLATFORM_ID } from '@angular/core';
 import { RouterOutlet, RouterModule, Router, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { filter } from 'rxjs/operators';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'app-root',
@@ -18,11 +19,11 @@ export class App implements AfterViewInit {
   @ViewChild('navLinks') navLinks!: ElementRef;
   indicatorStyle = { left: '0px', width: '0px', opacity: 0 };
 
-  constructor(private router: Router) {
+  constructor(private router: Router, @Inject(PLATFORM_ID) private platformId: Object) {
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd)
     ).subscribe(() => {
-      setTimeout(() => this.updateIndicator(), 50); // Delay for routerLinkActive to apply
+      setTimeout(() => this.updateIndicator(), 50);
     });
   }
 
@@ -36,8 +37,9 @@ export class App implements AfterViewInit {
   }
 
   updateIndicator() {
+    if (!isPlatformBrowser(this.platformId)) return;
     if (!this.navLinks || window.innerWidth <= 768) return;
-    
+
     const activeEl = this.navLinks.nativeElement.querySelector('.active') as HTMLElement;
     if (activeEl) {
       this.indicatorStyle = {
