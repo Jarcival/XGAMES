@@ -1,0 +1,71 @@
+<h1 class="titulo">Alta de Producto</h1>
+
+<div class="form-container">
+  <div class="form-card premium-card">
+    <div class="card-glow"></div>
+    <div class="card-content">
+      
+      <form [formGroup]="form" (ngSubmit)="guardar()" class="formulario">
+
+        <div class="input-group">
+          <input type="text" placeholder="Nombre del videojuego" formControlName="nombre">
+          <small *ngIf="form.get('nombre')?.touched && form.get('nombre')?.invalid" class="error-msg">
+            Nombre requerido
+          </small>
+        </div>
+
+        <div class="input-group">
+          <input type="text" placeholder="Categoría (ej. Acción, RPG)" formControlName="categoria">
+          <small *ngIf="form.get('categoria')?.touched && form.get('categoria')?.invalid" class="error-msg">
+            Categoría requerida
+          </small>
+        </div>
+
+        <div class="input-group">
+          <input type="text" placeholder="Marca / Estudio" formControlName="marca">
+          <small *ngIf="form.get('marca')?.touched && form.get('marca')?.invalid" class="error-msg">
+            Marca requerida
+          </small>
+        </div>
+
+        <div class="form-row">
+          <div class="input-group flex-1">
+            <input type="number" placeholder="Precio ($)" formControlName="precio">
+            <small *ngIf="form.get('precio')?.touched && form.get('precio')?.invalid" class="error-msg">
+              Precio inválido
+            </small>
+          </div>
+
+          <div class="input-group flex-1">
+            <input type="number" placeholder="Stock" formControlName="stock">
+            <small *ngIf="form.get('stock')?.touched && form.get('stock')?.invalid" class="error-msg">
+              Stock inválido
+            </small>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <input type="text" placeholder="URL de la Imagen" formControlName="imagen">
+        </div>
+
+        <div class="input-group">
+          <textarea placeholder="Descripción del producto" formControlName="descripcion"></textarea>
+          <small *ngIf="form.get('descripcion')?.touched && form.get('descripcion')?.invalid" class="error-msg">
+            Descripción requerida
+          </small>
+        </div>
+
+        <label class="checkbox-container">
+          <input type="checkbox" formControlName="disponible">
+          <span class="checkmark"></span>
+          Producto Disponible
+        </label>
+
+        <button type="submit" class="btn-primary" [disabled]="form.invalid || guardando">
+          {{ guardando ? 'Guardando...' : 'Guardar Producto' }}
+        </button>
+
+      </form>
+    </div>
+  </div>
+</div>

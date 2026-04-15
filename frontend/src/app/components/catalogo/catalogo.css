@@ -1,0 +1,152 @@
+.titulo {
+  margin-bottom: 40px;
+}
+
+/* GRID */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 30px;
+  justify-items: center;
+  padding: 20px 0;
+}
+
+/* PREMIUM CARD BASE */
+.premium-card {
+  position: relative;
+  background: rgba(24, 24, 27, 0.8);
+  backdrop-filter: blur(10px);
+  padding: 2px;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 280px;
+  text-align: center;
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 1;
+}
+
+.card-glow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--accent-gradient);
+  border-radius: 16px;
+  z-index: -1;
+  opacity: 0.3;
+  transition: opacity 0.4s;
+}
+
+.premium-card:hover {
+  transform: translateY(-8px) scale(1.02);
+}
+
+.premium-card:hover .card-glow {
+  opacity: 1;
+  filter: blur(8px);
+}
+
+.card-content {
+  background: var(--card);
+  padding: 20px;
+  border-radius: 14px;
+  height: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+/* IMAGEN */
+.img-wrapper {
+  width: 100%;
+  height: 160px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s;
+}
+
+.premium-card:hover .img-wrapper img {
+  transform: scale(1.1);
+}
+
+/* PRECIO & TEXTO */
+h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+}
+
+.precio {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: var(--accent);
+  margin: 10px 0;
+}
+
+.status {
+  font-size: 0.85rem;
+  margin-bottom: 15px;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.disponible {
+  color: #22c55e;
+}
+
+.no-disponible {
+  color: #ef4444; /* red neon */
+}
+
+.agotado {
+  filter: grayscale(1);
+  opacity: 0.7;
+}
+
+/* BOTONES */
+.acciones {
+  display: flex;
+  gap: 10px;
+  margin-top: auto;
+  justify-content: space-between;
+}
+
+.acciones button {
+  flex: 1;
+  padding: 10px 0;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s;
+}
+
+.btn-primary {
+  background: var(--accent-gradient);
+  color: white;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: scale(1.05);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--accent);
+  border: 1px solid var(--accent) !important;
+}
+
+.btn-outline:hover {
+  background: var(--accent);
+  color: var(--bg);
+  box-shadow: 0 0 10px var(--accent);
+}

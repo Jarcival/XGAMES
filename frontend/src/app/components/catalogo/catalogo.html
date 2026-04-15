@@ -1,0 +1,52 @@
+<h1 class="titulo">Catálogo de videojuegos</h1>
+
+<div class="grid">
+
+  @for (p of juegos(); track p.id) {
+
+    <div class="card premium-card"
+         [ngClass]="{ 'agotado': !p.disponible }">
+
+      <div class="card-glow"></div>
+
+      <div class="card-content">
+
+        <div class="img-wrapper">
+          <img [src]="p.imagen" alt="{{ p.nombre }}">
+        </div>
+
+        <h3>{{ p.nombre }}</h3>
+
+        <p class="precio">
+          {{ p.precio | currency:'MXN':'symbol-narrow' }}
+        </p>
+
+        @if (p.disponible) {
+          <p class="disponible status">Disponible</p>
+        } @else {
+          <p class="no-disponible status">Agotado</p>
+        }
+
+        <div class="acciones">
+          <button class="btn-outline"
+                  [routerLink]="['/detalle', p.id]">
+            Detalles
+          </button>
+
+          @if (p.disponible) {
+            <button class="btn-primary">
+              Agregar
+            </button>
+          }
+        </div>
+
+      </div>
+    </div>
+
+  } @empty {
+
+    <p class="sin-productos">Cargando productos...</p>
+
+  }
+
+</div>
