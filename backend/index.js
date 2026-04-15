@@ -1,11 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2/promise');
+const path = require('path'); //PARA HACER PUBLICA LA CARPETA DE LAS IMNGS
+
 
 const app = express();
 
 app.use(cors());
 app.use(express.json()); 
+app.use('/public', express.static(path.join(__dirname, 'public')));//IMGS
+app.use('/img', express.static(path.join(__dirname, 'public/img')));
 
 // Configuración de la BD 
 const db = mysql.createPool({
