@@ -1,6 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ProductoService } from '../../core/services/producto';
 
 @Component({
   selector: 'app-inicio',
@@ -19,9 +20,19 @@ export class Inicio implements OnInit, OnDestroy {
 
   index = 0;
   intervalId: any;
+  productos = signal<any[]>([]);
+
+  constructor(private productoService: ProductoService) {}
 
   ngOnInit() {
     this.startCarousel();
+    this.productoService.getProductos().subscribe({
+      next: (datos: any[]) => {
+        // Tomamos los 4 primeros productos para "Lo más vendido"
+        this.productos.set(datos.slice(0, 4));
+      },
+      error: (err) => console.error('Error al cargar productos de inicio', err)
+    });
   }
 
   ngOnDestroy() {
@@ -59,18 +70,4 @@ export class Inicio implements OnInit, OnDestroy {
   anterior() {
     this.index = (this.index - 1 + this.imagenes.length) % this.imagenes.length;
   }
-
-  // SIMULAMOS UNA BASE DE DATOS DE PRODUCTOS
-  productos = [
-    { id: 1, nombre: 'FIFA 24', precio: 1200, disponible: true },
-    { id: 2, nombre: 'Call of Duty', precio: 1400, disponible: true },
-    { id: 3, nombre: 'GTA V', precio: 900, disponible: false },
-    { id: 4, nombre: 'Minecraft', precio: 600, disponible: true }
-  ];
-
-  get productosRandom() {
-    return this.productos
-      .sort(() => 0.5 - Math.random())
-      .slice(0, 3);
-  }
-}
+}

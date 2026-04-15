@@ -19,8 +19,8 @@
           </div>
 
           @if (producto().disponible) {
-            <p class="disponible status">✔ Disponible</p>
-            <button class="btn-agregar">Agregar al carrito</button>
+            <p class="disponible status">✔ Disponible (Stock: {{ producto().stock }})</p>
+            <button class="btn-primary" (click)="agregarAlCarrito(producto())">Agregar al carrito</button>
           } @else {
             <p class="no-disponible status">✘ Agotado</p>
           }

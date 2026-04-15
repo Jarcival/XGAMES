@@ -30,15 +30,15 @@
 
   <h1 class="section-title">Lo más vendido <span class="badge">🔥 Hot</span></h1>
   <section class="productos">
-    <div class="card premium-card" *ngFor="let p of productos">
+    <div class="card premium-card" *ngFor="let p of productos()">
       <div class="card-glow"></div>
       <div class="card-content">
         <h3>{{ p.nombre }}</h3>
-        <p class="price">{{ p.precio | currency }}</p>
+        <p class="price">{{ p.precio | currency:'MXN':'symbol-narrow' }}</p>
         <span class="status" [class.out-stock]="!p.disponible">
           {{ p.disponible ? 'Disponible' : 'Agotado' }}
         </span>
-        <button [disabled]="!p.disponible">Ver más</button>
+        <button [disabled]="!p.disponible" [routerLink]="['/productos', p.id]">Ver más</button>
       </div>
     </div>
   </section>

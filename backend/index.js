@@ -107,6 +107,29 @@ app.post('/mensajes', validarMensaje, async (req, res) => {
     }
 });
 
+// PUT /checkout (Realizar compra)
+app.put('/checkout', async (req, res) => {
+    try {
+        const items = req.body;
+        if (!Array.isArray(items) || items.length === 0) {
+            return res.status(400).json({ error: 'El carrito está vacío' });
+        }
+
+        for (const item of items) {
+            const query = `
+                UPDATE productos 
+                SET stock = GREATEST(stock - ?, 0), 
+                    disponible = IF(stock - ? > 0, 1, 0) 
+                WHERE id = ?`;
+            await db.execute(query, [item.cantidad, item.cantidad, item.id]);
+        }
+
+        res.status(200).json({ mensaje: 'Compra realizada comprobada y stock reducido correctamente' });
+    } catch (error) {
+        res.status(500).json({ error: 'Error al procesar la compra' });
+    }
+});
+
 // ==========================================
 // 3. INICIAR SERVIDOR
 // ==========================================

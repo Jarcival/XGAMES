@@ -22,4 +22,9 @@ export class ProductoService {
   crearProducto(producto: any): Observable<any> {
     return this.http.post(this.apiUrl, producto);
   }
+
+  checkout(items: any[]): Observable<any> {
+    // La ruta de checkout
+    return this.http.put('http://localhost:3000/checkout', items);
+  }
 }
