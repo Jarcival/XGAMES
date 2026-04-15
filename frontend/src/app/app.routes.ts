@@ -9,7 +9,7 @@ import { AltaProd } from './components/alta-prod/alta-prod';
 export const routes: Routes = [
   { path: '', component: Inicio }, 
   { path: 'catalogo', component: Catalogo },
-  { path: 'detalle/:id', component: Detalle },
+  { path: 'productos/:id', component: Detalle }, //la que es dinamica 
   { path: 'carrito', component: Carrito },
   { path: 'contacto', component: Contacto },
   { path: 'alta-prod', component: AltaProd }

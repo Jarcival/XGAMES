@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { ProductoService } from '../../core/services/producto'; // <-- Importamos el servicio
 
 @Component({
   selector: 'app-detalle',
@@ -9,22 +10,28 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
   templateUrl: './detalle.html',
   styleUrl: './detalle.css',
 })
-export class Detalle {
+export class Detalle implements OnInit {
+  // Usamos signal igual que en el catálogo para evitar problemas de repintado
+  producto = signal<any>(null);
 
-  producto: any;
-
-  productos = [
-    { id: 1, nombre: 'FIFA 24', precio: 1200, imagen: '/imgs/user1.jpeg', descripcion: 'Juego de fútbol realista', disponible: true },
-    { id: 2, nombre: 'Call of Duty', precio: 1400, imagen: 'assets/cod.jpg', descripcion: 'Juego de disparos', disponible: false },
-    { id: 3, nombre: 'GTA V', precio: 900, imagen: 'assets/gta.jpg', descripcion: 'Mundo abierto', disponible: true },
-    { id: 4, nombre: 'Minecraft', precio: 600, imagen: 'assets/minecraft.jpg', descripcion: 'Creatividad sin límites', disponible: true }
-  ];
-
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private productoService: ProductoService // <-- Inyectamos el servicio
+  ) {}
 
   ngOnInit() {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    // 1. Obtenemos el ID de la URL
+    const id = this.route.snapshot.paramMap.get('id');
 
-    this.producto = this.productos.find(p => p.id === id);
+    // 2. Si hay un ID, vamos al backend a buscar el juego
+    if (id) {
+      this.productoService.getProducto(id).subscribe({
+        next: (datos) => {
+          this.producto.set(datos); // Guardamos la info de la BD
+          console.log('Detalle cargado:', this.producto());
+        },
+        error: (err) => console.error('Error al cargar el detalle', err)
+      });
+    }
   }
 }
