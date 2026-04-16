@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2/promise');
 const path = require('path'); //PARA HACER PUBLICA LA CARPETA DE LAS IMNGS
-
+//final
 
 const app = express();
 
