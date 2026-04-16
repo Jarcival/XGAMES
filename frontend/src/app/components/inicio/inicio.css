@@ -105,7 +105,7 @@
 
 .nav-btn.prev {
   left: 20px;
-  padding-bottom: 5px; /* Visual center tweak */
+  padding-bottom: 5px; 
 }
 
 .nav-btn.next {
@@ -167,7 +167,7 @@
   background: var(--accent-gradient);
   border-radius: 16px;
   z-index: -1;
-  opacity: 0.3; /* visible border glow */
+  opacity: 0.3; 
   transition: opacity 0.4s;
 }
 
@@ -187,7 +187,7 @@
 
 .premium-card:hover .card-glow {
   opacity: 1;
-  filter: blur(8px); /* Neon outglow */
+  filter: blur(8px); 
 }
 
 .card h3 {
@@ -209,7 +209,7 @@
 }
 
 .status.out-stock {
-  color: #ef4444; /* red */
+  color: #ef4444;
 }
 
 .card button {

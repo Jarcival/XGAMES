@@ -119,7 +119,7 @@ body {
   }
 
   .nav-indicator {
-    display: none; /* simple workaround for mobile menu */
+    display: none; 
   }
 }
 
