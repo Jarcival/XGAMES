@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 })
 export class Detalle implements OnInit {
   producto = signal<any>(null);
+  infoExtra = signal<any>(null); // Datos extra de RAWG (Punto Extra)
 
   constructor(
     private route: ActivatedRoute,
@@ -28,10 +29,27 @@ export class Detalle implements OnInit {
       this.productoService.getProducto(id).subscribe({
         next: (datos) => {
           this.producto.set(datos);
+
+          // 2. Usamos el nombre del juego que llegó para buscar en RAWG
+          this.buscarInfoAdicional(datos.nombre);
         },
         error: (err) => console.error('Error al cargar el detalle', err)
       });
     }
+  }
+
+  // Método para manejar la API Externa
+  buscarInfoAdicional(nombreJuego: string) {
+    this.productoService.getExtraInfoRAWG(nombreJuego).subscribe({
+      next: (rawgData) => {
+        // RAWG nos regresa un arreglo llamado 'results'. Tomamos el primero (el más exacto)
+        if (rawgData.results && rawgData.results.length > 0) {
+          this.infoExtra.set(rawgData.results[0]);
+          console.log('RAWG cargado!', this.infoExtra());
+        }
+      },
+      error: (err) => console.error('Error API RAWG:', err)
+    });
   }
 
   agregarAlCarrito(producto: any) {
