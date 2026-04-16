@@ -1,5 +1,6 @@
 <button class="volver" routerLink="/catalogo">← Volver al catálogo</button>
 
+
 @if (producto()) {
   <div class="detalle-container">
     <div class="detalle-card">
@@ -19,8 +20,8 @@
           </div>
 
           @if (producto().disponible) {
-            <p class="disponible status">✔ Disponible</p>
-            <button class="btn-agregar">Agregar al carrito</button>
+            <p class="disponible status">✔ Disponible (Stock: {{ producto().stock }})</p>
+            <button class="btn-primary" (click)="agregarAlCarrito(producto())">Agregar al carrito</button>
           } @else {
             <p class="no-disponible status">✘ Agotado</p>
           }
@@ -32,5 +33,26 @@
 } @else {
   <div class="error-box">
     <p class="error">Cargando producto...</p>
+  </div>
+}
+@if (infoExtra()) {
+  <div class="caja-info-extra" style="margin-top: 20px; padding: 15px; border: 1px solid #00f0ff; border-radius: 8px;">
+    <h4 style="color: #00f0ff; margin-bottom: 10px;"> Info Extra (Desarrollado con RAWG API)</h4>
+    
+    <p><strong>Fecha de lanzamiento:</strong> {{ infoExtra().released | date:'longDate' }}</p>
+    
+    <p><strong>Calificación Metacritic:</strong> 
+      <span style="color: #4CAF50; font-weight: bold;">
+        {{ infoExtra().metacritic ? infoExtra().metacritic + '/100' : 'Sin calificar' }}
+      </span>
+    </p>
+
+    <p><strong>Géneros:</strong> 
+      @for (genero of infoExtra().genres; track genero.id) {
+        <span style="margin-right: 5px; font-size: 0.9em; background: #333; padding: 3px 8px; border-radius: 12px;">
+          {{ genero.name }}
+        </span>
+      }
+    </p>
   </div>
 }
