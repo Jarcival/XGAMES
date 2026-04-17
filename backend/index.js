@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2/promise');
 const path = require('path'); //PARA HACER PUBLICA LA CARPETA DE LAS IMNGS
+require('dotenv').config();
 //final
 
 const app = express();
@@ -13,10 +14,11 @@ app.use('/img', express.static(path.join(__dirname, 'public/img')));
 
 // Configuración de la BD 
 const db = mysql.createPool({
-    host: 'localhost',
-    user: 'root', 
-    password: '', 
-    database: 'tienda_videojuegos'
+    host: process.env.DB_HOST || 'localhost',
+    port: process.env.DB_PORT || 3306,
+    user: process.env.DB_USER || 'root', 
+    password: process.env.DB_PASSWORD || '', 
+    database: process.env.DB_NAME || 'tienda_videojuegos'
 });
 
 // 1. MIDDLEWARES DE VALIDACIÓN
@@ -133,7 +135,7 @@ app.put('/checkout', async (req, res) => {
 // ==========================================
 // 3. INICIAR SERVIDOR
 // ==========================================
-const PORT = 3000;
-app.listen(PORT, () => {
-    console.log(`Servidor backend corriendo en http://localhost:${PORT}`);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, '0.0.0.0', () => { 
+    console.log(`Servidor backend corriendo en el puerto ${PORT}`);
 });
