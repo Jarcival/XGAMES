@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root' 
 })
 export class ProductoService {
-  private apiUrl = 'http://localhost:3000/productos'; // La ruta del backend que se cambiara en el despliegue
+  private apiUrl = 'https://xgames-production.up.railway.app/productos'; // La ruta del backend que se cambiara en el despliegue
 
   // API Key gratuita de RAWG para videojuegos
   private rawgApiKey = '2b834b3e996e4147b42a06ad899b6806';
@@ -28,7 +28,7 @@ export class ProductoService {
 
   checkout(items: any[]): Observable<any> {
     // La ruta de checkout
-    return this.http.put('http://localhost:3000/checkout', items);
+    return this.http.put('https://xgames-production.up.railway.app/checkout', items);
   }
 
   // Busca el juego en RAWG por su nombre
